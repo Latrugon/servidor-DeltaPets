@@ -7,6 +7,12 @@ var ProductoSchema=Schema({
    categoriaProducto: { type: String, required: true },
    precio: { type: Number, required: true },
 
+   
+  creador: {
+   type: mongoose.Schema.Types.ObjectId,
+   ref: "Usuario",
+ },
+ creado: { type: Date, default: Date.now() },
 /* FORMATO DE JASON PARA CREAR EN POSTMAN...
 nombre : "Galletitas Miau",
 categoriaMascota : "Gatos",

@@ -1,7 +1,7 @@
-const Proyecto = require("../models/Proyecto");
+const Producto = require("../models/Producto");
 const { validationResult } = require("express-validator");
 
-exports.crearProyecto = async (req, res) => {
+exports.crearProducto = async (req, res) => {
   //revisar si hay errores
   const errores = validationResult(req);
   if (!errores.isEmpty()) {
@@ -9,13 +9,13 @@ exports.crearProyecto = async (req, res) => {
   }
 
   try {
-    //crear un nuevo proyecto
-    const proyecto = new Proyecto(req.body);
+    //crear un nuevo Producto
+    const producto = new Producto(req.body);
 
-    proyecto.creador = req.usuario.id;
+    producto.creador = req.usuario.id;
 
-    proyecto.save();
-    res.json(proyecto);
+    producto.save();
+    res.json(producto);
   } catch (error) {
     console.log("Hubo un error");
     console.log(error);
@@ -23,12 +23,12 @@ exports.crearProyecto = async (req, res) => {
   }
 };
 
-exports.obtenerProyectos = async (req, res) => {
+exports.obtenerProductos = async (req, res) => {
   try {
-    const proyectos = await Proyecto.find({ creador: req.usuario.id }).sort({
+    const productos = await Producto.find({ creador: req.usuario.id }).sort({
       creado: -1,
     });
-    res.json({ proyectos });
+    res.json({ productos });
   } catch (error) {
     console.log("Hubo un error");
     console.log(error);
@@ -36,7 +36,7 @@ exports.obtenerProyectos = async (req, res) => {
   }
 };
 
-exports.actualizarProyecto = async (req, res) => {
+exports.actualizarProducto = async (req, res) => {
   //revisar si hay errores
   const errores = validationResult(req);
   if (!errores.isEmpty()) {
@@ -44,30 +44,30 @@ exports.actualizarProyecto = async (req, res) => {
   }
 
   const { nombre } = req.body;
-  const nuevoProyecto = {};
+  const nuevoProducto = {};
 
   if (nombre) {
-    nuevoProyecto.nombre = nombre;
+    nuevoProducto.nombre = nombre;
   }
 
   try {
-    let proyecto = await Proyecto.findById(req.params.id);
+    let producto = await Producto.findById(req.params.id);
 
-    if (!proyecto) {
-      return res.status(400).json({ msg: "Proyecto no encontrado" });
+    if (!producto) {
+      return res.status(400).json({ msg: "Producto no encontrado" });
     }
 
-    if (proyecto.creador.toString() !== req.usuario.id) {
+    if (producto.creador.toString() !== req.usuario.id) {
       return res.status(400).json({ msg: "No autorizado" });
     }
 
-    proyecto = await Proyecto.findByIdAndUpdate(
+    producto = await Producto.findByIdAndUpdate(
       { _id: req.params.id },
-      { $set: nuevoProyecto },
+      { $set: nuevoProducto },
       { new: true }
     );
 
-    res.json({ proyecto });
+    res.json({ producto });
   } catch (error) {
     console.log("Hubo un error");
     console.log(error);
@@ -75,20 +75,20 @@ exports.actualizarProyecto = async (req, res) => {
   }
 };
 
-exports.eliminarProyecto = async (req, res) => {
+exports.eliminarProducto = async (req, res) => {
   try {
-    let proyecto = await Proyecto.findById(req.params.id);
+    let producto = await producto.findById(req.params.id);
 
-    if (!proyecto) {
-      return res.status(400).json({ msg: "Proyecto no encontrado" });
+    if (!producto) {
+      return res.status(400).json({ msg: "Producto no encontrado" });
     }
 
-    if (proyecto.creador.toString() !== req.usuario.id) {
+    if (producto.creador.toString() !== req.usuario.id) {
       return res.status(400).json({ msg: "No autorizado" });
     }
 
-    await Proyecto.remove({ _id: req.params.id });
-    res.json({ msg: "Proyecto eliminado" });
+    await Producto.remove({ _id: req.params.id });
+    res.json({ msg: "Producto eliminado" });
   } catch (error) {
     console.log("Hubo un error");
     console.log(error);

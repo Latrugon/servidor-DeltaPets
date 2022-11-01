@@ -1,5 +1,5 @@
 const {restart} = require("nodemon");
-const Producto = require("../models/producto");
+const Producto = require("../models/Producto");
 
 
 function saveProducto(req, res) {
