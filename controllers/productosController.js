@@ -77,7 +77,7 @@ exports.actualizarProducto = async (req, res) => {
 
 exports.eliminarProducto = async (req, res) => {
   try {
-    let producto = await producto.findById(req.params.id);
+    let producto = await Producto.findById(req.params.id);
 
     if (!producto) {
       return res.status(400).json({ msg: "Producto no encontrado" });
@@ -90,8 +90,8 @@ exports.eliminarProducto = async (req, res) => {
     await Producto.remove({ _id: req.params.id });
     res.json({ msg: "Producto eliminado" });
   } catch (error) {
-    console.log("Hubo un error");
+    console.log("Hubo un error al eliminar el producto");
     console.log(error);
-    res.status(400).send("Hubo un error");
+    res.status(400).send("Hubo un error eliminando el producto");
   }
 };
